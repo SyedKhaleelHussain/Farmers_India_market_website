@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import { ArrowRight } from 'lucide-react';
+import { useState, useEffect, MouseEvent } from 'react';
+import { ArrowRight, Bot } from 'lucide-react';
 import WeatherPanel from './WeatherPanel';
 
 const Hero = () => {
-  const [showBot, setShowBot] = useState(false);
+  const [showBot, setShowBot] = useState<boolean>(false);
 
   useEffect(() => {
     if (showBot) {
@@ -33,9 +33,11 @@ const Hero = () => {
     }
   }, [showBot]);
 
+  const handleModalClick = (e: MouseEvent<HTMLDivElement>) => e.stopPropagation();
+
   return (
     <section className="relative min-h-screen flex items-center pt-24 pb-16 overflow-hidden">
-      {/* Background video */}
+      {/* Background Video */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <video
           autoPlay
@@ -46,21 +48,23 @@ const Hero = () => {
         >
           <source
             src="https://videos.pexels.com/video-files/2491282/2491282-uhd_2732_1440_24fps.mp4"
-            type="video/mp4" 
+            type="video/mp4"
           />
           Your browser does not support the video tag.
         </video>
         <div className="absolute inset-0 bg-gradient-to-b from-[#1a291c]/70 to-[#1a291c]/30"></div>
       </div>
 
+      {/* Main Content */}
       <div className="container-custom relative z-10 text-white">
         <div className="max-w-3xl mx-auto text-center">
           <h1 className="heading-xl mb-6 animate-fade-up">
             Your Personal Garden Advisor
           </h1>
           <p className="body-lg mb-8 text-white/90 animate-fade-up animate-delay-100">
-            Get personalized plant recommendations based on your location, connect with fellow gardening enthusiasts, and find the best nurseries near you.
+            Get smart plant advice from our AI bot 🌱, explore local nurseries, and enjoy real-time weather updates.
           </p>
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-up animate-delay-200">
             <a
               href="https://www.google.com/maps/search/nurseries+near+me/"
@@ -70,18 +74,22 @@ const Hero = () => {
             >
               Find Nurseries Nearby
             </a>
-            <button onClick={() => setShowBot(true)} className="btn-primary">
-              Get Plant Advice
+            <button
+              onClick={() => setShowBot(true)}
+              className="btn-primary flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-green-500 via-emerald-600 to-green-700 text-white font-semibold rounded-full shadow-lg hover:brightness-110 transition-all duration-300 animate-glow"
+            >
+              <Bot size={18} /> Ask AI Plant Bot
             </button>
           </div>
         </div>
 
+        {/* Weather Panel */}
         <div className="mt-16 animate-fade-up animate-delay-300">
           <WeatherPanel />
         </div>
       </div>
 
-      {/* JotForm Bot iframe modal */}
+      {/* JotForm Bot Modal */}
       {showBot && (
         <div
           className="fixed inset-0 bg-black/80 z-[9999] flex items-center justify-center p-4"
@@ -89,7 +97,7 @@ const Hero = () => {
         >
           <div
             className="relative w-full max-w-3xl h-[700px] bg-white rounded-lg shadow-lg"
-            onClick={(e) => e.stopPropagation()}
+            onClick={handleModalClick}
           >
             <iframe
               id="JotFormIFrame-0196ffd613557912995e0beb3a81cf9096ff"
@@ -106,7 +114,7 @@ const Hero = () => {
                 border: 'none',
                 width: '100%',
               }}
-              onLoad={() => window.parent.scrollTo(0, 0)}
+              onLoad={() => window.parent?.scrollTo(0, 0)}
             />
             <button
               onClick={() => setShowBot(false)}
@@ -119,7 +127,7 @@ const Hero = () => {
         </div>
       )}
 
-      {/* Scroll down indicator */}
+      {/* Scroll Down Indicator */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
         <a
           href="#featured"
